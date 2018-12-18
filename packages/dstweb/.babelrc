@@ -1,0 +1,47 @@
+{
+  "presets": [
+    "es2015",
+    "react",
+    "stage-1"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "yxyweb": "./src/yxyweb",
+          "src": "./src",
+          "SvgIcon": "./src/yxyweb/common/components/common/SvgIcon.js"
+        }
+      }
+    ]
+  ],
+  // "plugins": [["import", { "style": "css", "libraryName": "antd" }]],
+  "env": {
+    "development": {
+      "plugins": [
+        [
+          "react-transform",
+          {
+            "transforms": [
+              {
+                "transform": "react-transform-hmr",
+                // if you use React Native, pass "react-native" instead:
+                "imports": [
+                  "react"
+                ],
+                // this is important for Webpack HMR:
+                "locals": [
+                  "module"
+                ]
+              }
+            ]
+            // note: you can put more transforms into array
+            // this is just one of them!
+          }
+        ]
+      ]
+    }
+  }
+}

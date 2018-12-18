@@ -1,0 +1,21 @@
+variables:
+  app_path: /srv/dest/uretailweb
+
+stages:
+  - build
+
+build_job:
+  stage: build
+  script:
+    - if [ -e "$app_path/node_modules.tmp" ]; then mv $app_path/node_modules.tmp ./node_modules; fi
+    - npm install --registry=https://registry.npm.taobao.org
+    - cd $CI_PROJECT_DIR/src/
+    - if [ ! -e yxyweb/.git ];then git clone --depth=1 -b release git@git.yonyou.com:fangqg/yxyweb.git; fi
+    - npm run build
+    - if [ ! -e "$app_path/.git" ];then git clone --depth=1 git@gitlab.yonyouup.cn:uretail/uretailweb.git $app_path;fi
+    - cd $CI_PROJECT_DIR/ && rsync -av --delete bin node_modules static home package.json $app_path
+    - cd $app_path && git add -A && git commit -am 'passed'
+    - git push origin master
+    - cd $CI_PROJECT_DIR/ && mv ./node_modules $app_path/node_modules.tmp
+  only: 
+    - release
